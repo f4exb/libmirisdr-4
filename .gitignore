@@ -1,0 +1,3 @@
+build/
+src/*.dll
+src/x64
