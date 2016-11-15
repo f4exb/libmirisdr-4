@@ -1,3 +1,4 @@
 build/
 src/*.dll
+src/*.a
 src/x64
