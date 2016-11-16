@@ -56,3 +56,12 @@
 
 /* reg5: 16:21 (reserved) */
 #define MIRISDR_RF_SYNTHESIZER_RESERVED_PROGRAMMING     0x28
+
+typedef struct
+{
+    uint32_t low_cut;
+    int mode;
+    int upconvert_mixer_on;
+    int am_port;
+    int lo_div;
+} hw_switch_freq_plan_t;

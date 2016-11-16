@@ -35,6 +35,7 @@ struct mirisdr_dev {
     int                 gain_lna;
     int                 gain_mixer;
     int                 gain_baseband;
+    mirisdr_hw_flavour_t hw_flavour;
     enum {
         MIRISDR_FORMAT_AUTO_ON = 0,
         MIRISDR_FORMAT_AUTO_OFF

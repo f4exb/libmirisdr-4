@@ -77,6 +77,9 @@ void usage(void)
 		"\t    8000000: 8MHz\n"
 		"\t[-s samplerate (default: 2048000 Hz)]\n"
 		"\t[-d device_index (default: 0)]\n"
+	    "\t[-T device_type device variant (default: 0)]\n"
+        "\t    0:       Default\n"
+        "\t    1:       SDRPlay\n"
 		"\t[-g gain (default: 0 for auto)]\n"
 		"\t[-b output_block_size (default: 16 * 16384)]\n"
 		"\t[-S force sync output (default: async)]\n"
@@ -146,9 +149,11 @@ int main(int argc, char **argv)
 	int count;
 	int gains[100];
 	uint32_t rates[100];
+	mirisdr_hw_flavour_t hw_flavour = MIRISDR_HW_DEFAULT;
+	int intval;
 
 #ifndef _WIN32
-	while ((opt = getopt(argc, argv, "b:d:e:f:g:i:m:s:w:S::")) != -1) {
+	while ((opt = getopt(argc, argv, "b:d:T:e:f:g:i:m:s:w:S::")) != -1) {
 		switch (opt) {
 		case 'b':
 			out_block_size = (uint32_t)atof(optarg);
@@ -156,6 +161,13 @@ int main(int argc, char **argv)
 		case 'd':
 			dev_index = atoi(optarg);
 			break;
+        case 'T':
+            intval = atoi(optarg);
+            if ((intval >=0) && (intval <= 1))
+            {
+                hw_flavour = (mirisdr_hw_flavour_t) intval;
+            }
+            break;
 		case 'e':
 			if ((strcmp("ISOC", optarg) == 0) ||
 			    (strcmp("1", optarg) == 0)) {
@@ -241,7 +253,7 @@ int main(int argc, char **argv)
 	fprintf(stderr, "Using device %d: %s\n",
 		dev_index, mirisdr_get_device_name(dev_index));
 
-	r = mirisdr_open(&dev, dev_index);
+	r = mirisdr_open(&dev, hw_flavour, dev_index);
 	if (r < 0) {
 		fprintf(stderr, "Failed to open mirisdr device #%d.\n", dev_index);
 		exit(1);

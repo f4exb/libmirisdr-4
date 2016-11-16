@@ -197,6 +197,9 @@ void usage(void)
 		"\t    raw mode outputs 2x16 bit IQ pairs\n"
 		"\t[-s sample_rate (default: 24k)]\n"
 		"\t[-d device_index (default: 0)]\n"
+        "\t[-T device_type device variant (default: 0)]\n"
+        "\t    0:       Default\n"
+        "\t    1:       SDRPlay\n"
 		"\t[-g tuner_gain (default: automatic)]\n"
 		"\t[-m sample format (default: auto]\n"
 		"\t    504:    S8 (fastest)\n"
@@ -788,7 +791,7 @@ void full_demod(struct demod_state *d)
 		if (d->comp_fir_size == 9 && ds_p <= CIC_TABLE_MAX) {
 			generic_fir(d->lowpassed, d->lp_len,
 				cic_9_tables[ds_p], d->droop_i_hist);
-			generic_fir(d->lowpassed+1, d->lp_len-1, 
+			generic_fir(d->lowpassed+1, d->lp_len-1,
 				cic_9_tables[ds_p], d->droop_q_hist);
 		}
 	} else {
@@ -1157,13 +1160,22 @@ int main(int argc, char **argv)
 	demod_init(&demod);
 	output_init(&output);
 	controller_init(&controller);
+    mirisdr_hw_flavour_t hw_flavour = MIRISDR_HW_DEFAULT;
+    int intval;
 
-	while ((opt = getopt(argc, argv, "b:d:e:f:g:i:l:m:o:p:r:s:t:w:E:F:A:M:h")) != -1) {
+	while ((opt = getopt(argc, argv, "b:d:T:e:f:g:i:l:m:o:p:r:s:t:w:E:F:A:M:h")) != -1) {
 		switch (opt) {
 		case 'd':
 			dongle.dev_index = verbose_device_search(optarg);
 			dev_given = 1;
 			break;
+        case 'T':
+            intval = atoi(optarg);
+            if ((intval >=0) && (intval <= 1))
+            {
+                hw_flavour = (mirisdr_hw_flavour_t) intval;
+            }
+            break;
 		case 'e':
 			if ((strcmp("ISOC", optarg) == 0) ||
 			    (strcmp("1", optarg) == 0)) {
@@ -1310,7 +1322,7 @@ int main(int argc, char **argv)
 		exit(1);
 	}
 
-	r = mirisdr_open(&dongle.dev, (uint32_t)dongle.dev_index);
+	r = mirisdr_open(&dongle.dev, hw_flavour, (uint32_t)dongle.dev_index);
 	if (r < 0) {
 		fprintf(stderr, "Failed to open Mirics device #%d.\n", dongle.dev_index);
 		exit(1);
