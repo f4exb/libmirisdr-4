@@ -441,7 +441,9 @@ int mirisdr_set_bandwidth(mirisdr_dev_t *p, uint32_t bw)
         goto failed;
     }
 
-    return mirisdr_set_soft(p);
+    int r = mirisdr_set_soft(p);
+    r += mirisdr_set_gain(p); // restore gain
+    return r;
 
     failed: return -1;
 }
