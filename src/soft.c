@@ -38,7 +38,7 @@ hw_switch_freq_plan_t hw_switch_freq_plan_sdrplay[] = {
         {0,    MIRISDR_MODE_AM,  MIRISDR_UPCONVERT_MIXER_ON, MIRISDR_AM_PORT2, 16},
         {50,   MIRISDR_MODE_VHF, 0, 0, 32},
         {120,  MIRISDR_MODE_B3,  0, 0, 16},
-        {250,  MIRISDR_MODE_AM,  MIRISDR_UPCONVERT_MIXER_OFF, MIRISDR_AM_PORT2, 16},
+//        {250,  MIRISDR_MODE_AM,  MIRISDR_UPCONVERT_MIXER_OFF, MIRISDR_AM_PORT2, 16}, // Really ???
         {380,  MIRISDR_MODE_B45, 0, 0, 4},
         {1000, MIRISDR_MODE_BL, 0, 0, 2},
         {2400, -1, 0, 0, 0},
@@ -73,6 +73,17 @@ int mirisdr_set_soft(mirisdr_dev_t *p)
     }
 
     hw_switch_freq_plan_t switch_plan = hw_switch_freq_plan[(int) p->hw_flavour][i-1];
+
+#if MIRISDR_DEBUG >= 1
+    fprintf(stderr, "mirisdr_set_soft: i:%d flavour:%d flow:%u mode:%d up:%d port:%d lo:%d\n",
+            i-1,
+            (int) p->hw_flavour,
+            switch_plan.low_cut,
+            switch_plan.mode,
+            switch_plan.upconvert_mixer_on,
+            switch_plan.am_port,
+            switch_plan.lo_div);
+#endif
 
     if (switch_plan.mode == MIRISDR_MODE_AM)
     {
