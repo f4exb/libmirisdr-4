@@ -37,22 +37,22 @@ int mirisdr_set_gain (mirisdr_dev_t *p) {
     reg1|= 0x0 << 10;
     reg1|= p->gain_mixer << 12;
     reg1|= p->gain_lna << 13;
-    reg1|= MIRISDR_DC_OFFSET_CALIBRATION_ONE_SHOT << 14;
+    reg1|= MIRISDR_DC_OFFSET_CALIBRATION_PERIODIC2 << 14;
     reg1|= MIRISDR_DC_OFFSET_CALIBRATION_SPEEDUP_OFF << 17;
     mirisdr_write_reg(p, 0x09, reg1);
 
     /* DC Offset Calibration setup */
-    reg6|= 0x3F << 4;
-    reg6|= 0xFFF << 10;
+    reg6|= 0x1F << 4;
+    reg6|= 0x800 << 10;
     mirisdr_write_reg(p, 0x09, reg6);
 // set to 0xf300 to select AM input added Dec 5 2014 SM5BSZ
-    if (p->freq < 50000000) 
+    if (p->freq < 50000000)
       {
       mirisdr_write_reg(p, 0x08, 0xf300);
       }
-    else 
+    else
       {
-      if (p->freq >= 108000000) 
+      if (p->freq >= 108000000)
         {
 // Nothing between 00 and 0xff helps to switch in signals above 108 MHz.
 //        mirisdr_write_reg(p, 0x08, 0xf3ff);
@@ -126,19 +126,19 @@ gain_auto:
 }
 
 int mirisdr_set_tuner_gain_mode (mirisdr_dev_t *p, int mode) {
-    if (!mode) {
-        p->gain = -1;
-#if MIRISDR_DEBUG >= 1
-        fprintf( stderr, "gain mode: auto\n");
-#endif
-        mirisdr_write_reg(p, 0x09, 0x014281);
-        mirisdr_write_reg(p, 0x09, 0x3FFFF6);
-    } else if (p->gain < 0) {
-#if MIRISDR_DEBUG >= 1
-        fprintf( stderr, "gain mode: manual\n");
-#endif
-        p->gain = DEFAULT_GAIN;
-    }
+//    if (!mode) {
+//        p->gain = -1;
+//#if MIRISDR_DEBUG >= 1
+//        fprintf( stderr, "gain mode: auto\n");
+//#endif
+//        mirisdr_write_reg(p, 0x09, 0x014281);
+//        mirisdr_write_reg(p, 0x09, 0x3FFFF6);
+//    } else if (p->gain < 0) {
+//#if MIRISDR_DEBUG >= 1
+//        fprintf( stderr, "gain mode: manual\n");
+//#endif
+//        p->gain = DEFAULT_GAIN;
+//    }
 
     return 0;
 }
