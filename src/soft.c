@@ -314,8 +314,9 @@ int mirisdr_set_soft(mirisdr_dev_t *p)
 int mirisdr_set_center_freq(mirisdr_dev_t *p, uint32_t freq)
 {
     p->freq = freq;
-
-    return mirisdr_set_soft(p);
+    int r = mirisdr_set_soft(p);
+    r += mirisdr_set_gain(p); // restore gain
+    return r;
 }
 
 uint32_t mirisdr_get_center_freq(mirisdr_dev_t *p)
