@@ -116,9 +116,9 @@ int mirisdr_open (mirisdr_dev_t **p, mirisdr_hw_flavour_t hw_flavour, uint32_t i
     dev->rate = DEFAULT_RATE;
     dev->gain = DEFAULT_GAIN;
 
-    dev->gain_lna = 0;
-    dev->gain_mixer = 0;
-    dev->gain_baseband = 43;
+    dev->gain_reduction_lna = 0;
+    dev->gain_reduction_mixer = 0;
+    dev->gain_reduction_baseband = 43;
     dev->if_freq = MIRISDR_IF_ZERO;
     dev->format_auto = MIRISDR_FORMAT_AUTO_ON;
     dev->bandwidth = MIRISDR_BW_8MHZ;

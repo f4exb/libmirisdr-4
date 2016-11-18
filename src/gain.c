@@ -20,7 +20,7 @@
 int mirisdr_set_gain (mirisdr_dev_t *p) {
     uint32_t reg1 = 1, reg6 = 6;
 #if MIRISDR_DEBUG >= 1
-    fprintf (stderr, "gain baseband: %d, lna: %d, mixer: %d\n", p->gain_baseband, p->gain_lna, p->gain_mixer);
+    fprintf (stderr, "gain reduction baseband: %d, lna: %d, mixer: %d\n", p->gain_reduction_baseband, p->gain_reduction_lna, p->gain_reduction_mixer);
 #endif
 // Reset to 0xf380 to enable gain control added Dec 5 2014 SM5BSZ
     mirisdr_write_reg(p, 0x08, 0xf380);
@@ -33,10 +33,10 @@ int mirisdr_set_gain (mirisdr_dev_t *p) {
     /* 13 => lna gain reduction -24dB */
     /* 14-16 => DC kalibrace */
     /* 17 => zrychlená DC kalibrace */
-    reg1|= p->gain_baseband << 4;
+    reg1|= p->gain_reduction_baseband << 4;
     reg1|= 0x0 << 10;
-    reg1|= p->gain_mixer << 12;
-    reg1|= p->gain_lna << 13;
+    reg1|= p->gain_reduction_mixer << 12;
+    reg1|= p->gain_reduction_lna << 13;
     reg1|= MIRISDR_DC_OFFSET_CALIBRATION_PERIODIC2 << 14;
     reg1|= MIRISDR_DC_OFFSET_CALIBRATION_SPEEDUP_OFF << 17;
     mirisdr_write_reg(p, 0x09, reg1);
@@ -90,17 +90,17 @@ int mirisdr_set_tuner_gain (mirisdr_dev_t *p, int gain) {
 
     /* Nejvyšší citlivost vždy bez redukce mixeru a lna */
     if (p->gain >= 43) {
-        p->gain_lna = 0;
-        p->gain_mixer = 0;
-        p->gain_baseband = 59 - (p->gain - 43);
+        p->gain_reduction_lna = 0;
+        p->gain_reduction_mixer = 0;
+        p->gain_reduction_baseband = 59 - (p->gain - 43);
     } else if (p->gain >= 19) {
-        p->gain_lna = 1;
-        p->gain_mixer = 0;
-        p->gain_baseband = 59 - (p->gain - 19);
+        p->gain_reduction_lna = 1;
+        p->gain_reduction_mixer = 0;
+        p->gain_reduction_baseband = 59 - (p->gain - 19);
     } else {
-        p->gain_lna = 1;
-        p->gain_mixer = 1;
-        p->gain_baseband = 59 - p->gain;
+        p->gain_reduction_lna = 1;
+        p->gain_reduction_mixer = 1;
+        p->gain_reduction_baseband = 59 - p->gain;
     }
 
     return mirisdr_set_gain(p);
@@ -114,10 +114,10 @@ int mirisdr_get_tuner_gain (mirisdr_dev_t *p) {
 
     if (p->gain < 0) goto gain_auto;
 
-    gain+= 59 - p->gain_baseband;
+    gain+= 59 - p->gain_reduction_baseband;
 
-    if (!p->gain_lna) gain+= 24;
-    if (!p->gain_mixer) gain+= 19;
+    if (!p->gain_reduction_lna) gain+= 24;
+    if (!p->gain_reduction_mixer) gain+= 19;
 
     return gain;
 
@@ -148,33 +148,33 @@ int mirisdr_get_tuner_gain_mode (mirisdr_dev_t *p) {
 }
 
 int mirisdr_set_mixer_gain (mirisdr_dev_t *p, int gain) {
-    p->gain_mixer = gain;
+    p->gain_reduction_mixer = gain;
 
     return mirisdr_set_gain(p);
 }
 
 int mirisdr_set_lna_gain (mirisdr_dev_t *p, int gain) {
-    p->gain_lna = gain;
+    p->gain_reduction_lna = gain;
 
     return mirisdr_set_gain(p);
 }
 
 int mirisdr_set_baseband_gain (mirisdr_dev_t *p, int gain) {
-    p->gain_baseband = gain;
+    p->gain_reduction_baseband = 59 - gain;
 
     return mirisdr_set_gain(p);
 }
 
 int mirisdr_get_mixer_gain (mirisdr_dev_t *p) {
-    return p->gain_mixer;
+    return p->gain_reduction_mixer ? 0 : 19;
 }
 
 int mirisdr_get_lna_gain (mirisdr_dev_t *p) {
-    return p->gain_lna;
+    return p->gain_reduction_lna ? 0 : 24;
 }
 
 int mirisdr_get_baseband_gain (mirisdr_dev_t *p) {
-    return p->gain_baseband;
+    return 59 - p->gain_reduction_baseband;
 }
 
 
