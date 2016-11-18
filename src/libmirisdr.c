@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#ifndef _WIN32
+#if !defined (_WIN32) || defined(__MINGW32__)
 #include <unistd.h>
 #define min(a, b) (((a) < (b)) ? (a) : (b))
 #endif
@@ -127,7 +127,7 @@ int mirisdr_open (mirisdr_dev_t **p, mirisdr_hw_flavour_t hw_flavour, uint32_t i
     dev->hw_flavour = hw_flavour;
 
     /* ISOC is more stable but works only on Unix systems */
-#ifndef _WIN32
+#if !defined (_WIN32) || defined(__MINGW32__)
     dev->transfer = MIRISDR_TRANSFER_ISOC;
 #else
     dev->transfer = MIRISDR_TRANSFER_BULK;

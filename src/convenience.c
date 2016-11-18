@@ -23,7 +23,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#ifndef _WIN32
+#if !defined(_WIN32) || defined(__MINGW32__)
 #include <unistd.h>
 #else
 #include <windows.h>

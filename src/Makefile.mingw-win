@@ -27,11 +27,11 @@ x64/mirisdr.dll: libmirisdr.oy Makefile.mingw
 libmirisdr.o: Makefile.mingw libmirisdr.c async.c reg.c adc.c convert/base.c \
 devices.c gain.c hard.c streaming.c soft.c sync.c ../include/mirisdr.h \
  ../include/mirisdr_export.h
-	$(WCC) -D_WIN32 libmirisdr.c $(CFW) libmirisdr.o
+	$(WCC) libmirisdr.c $(CFW) libmirisdr.o
 
 libmirisdr.oy: Makefile.mingw libmirisdr.c async.c reg.c adc.c convert/base.c \
 devices.c gain.c hard.c streaming.c soft.c sync.c ../include/mirisdr.h \
  ../include/mirisdr_export.h
-	$(WCC64) -D_WIN32 libmirisdr.c $(CFW64) libmirisdr.oy	
+	$(WCC64) libmirisdr.c $(CFW64) libmirisdr.oy
 
 

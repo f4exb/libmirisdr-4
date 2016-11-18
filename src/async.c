@@ -259,9 +259,9 @@ int mirisdr_cancel_async_now (mirisdr_dev_t *p) {
     /* cyklujeme dokud není vše ukončeno */
     while ((p->async_status != MIRISDR_ASYNC_INACTIVE) &&
            (p->async_status != MIRISDR_ASYNC_FAILED))
-#ifdef _WIN32
+#if defined (_WIN32) && !defined(__MINGW32__)
     Sleep(20);
-#else                
+#else
     usleep(20000);
 #endif
 
@@ -477,7 +477,7 @@ int mirisdr_read_async (mirisdr_dev_t *p, mirisdr_read_async_cb_t cb, void *ctx,
     mirisdr_async_free(p);
 
     /* ukončíme streamování dat */
-#ifdef _WIN32
+#if defined (_WIN32) && !defined(__MINGW32__)
     Sleep(20);
 #else                
     usleep(20000);
@@ -555,7 +555,7 @@ int mirisdr_stop_async (mirisdr_dev_t *p) {
 
     if (p->async_status != MIRISDR_ASYNC_RUNNING) goto failed;
 
-#ifdef _WIN32
+#if defined (_WIN32) && !defined(__MINGW32__)
     Sleep(20);
 #else                
     usleep(20000);

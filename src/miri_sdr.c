@@ -23,7 +23,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#ifndef _WIN32
+#if !defined (_WIN32) || defined(__MINGW32__)
 #include <unistd.h>
 #else
 #include <Windows.h>
@@ -42,7 +42,7 @@ static mirisdr_dev_t *dev = NULL;
 
 void usage(void)
 {
-	#ifdef _WIN32
+#if defined (_WIN32) && !defined(__MINGW32__)
 	fprintf(stderr,
 		"Usage:\t miri_sdr.exe [device_index] [samplerate in kHz] "
 		"[gain] [frequency in Hz] [filename]\n");
@@ -54,7 +54,7 @@ void usage(void)
 		"\t    384:    S10 +2bits \n"
 		"\t    336:    S12\n"
 		"\t    252:    S14\n"
-#ifndef _WIN32
+#if !defined (_WIN32) || defined(__MINGW32__)
 		"\t[-e USB transfer mode (default: 1)]\n"
 #else
 		"\t[-e USB transfer mode (default: 2)]\n"
@@ -88,7 +88,7 @@ void usage(void)
 	exit(1);
 }
 
-#ifdef _WIN32
+#if defined (_WIN32) && !defined(__MINGW32__)
 BOOL WINAPI
 sighandler(int signum)
 {
@@ -122,7 +122,7 @@ static void mirisdr_callback(unsigned char *buf, uint32_t len, void *ctx)
 
 int main(int argc, char **argv)
 {
-#ifndef _WIN32
+#if !defined (_WIN32) || defined(__MINGW32__)
 	struct sigaction sigact;
 #endif
 	char *filename = NULL;
@@ -133,7 +133,7 @@ int main(int argc, char **argv)
 	FILE *file;
 	uint8_t *buffer;
 	uint32_t format = 0;
-#ifndef _WIN32
+#if !defined (_WIN32) || defined(__MINGW32__)
 	uint32_t transfer = 1;
 #else
 	uint32_t transfer = 2;
@@ -152,7 +152,7 @@ int main(int argc, char **argv)
 	mirisdr_hw_flavour_t hw_flavour = MIRISDR_HW_DEFAULT;
 	int intval;
 
-#ifndef _WIN32
+#if !defined (_WIN32) || defined(__MINGW32__)
 	while ((opt = getopt(argc, argv, "b:d:T:e:f:g:i:m:s:w:S::")) != -1) {
 		switch (opt) {
 		case 'b':
@@ -258,7 +258,7 @@ int main(int argc, char **argv)
 		fprintf(stderr, "Failed to open mirisdr device #%d.\n", dev_index);
 		exit(1);
 	}
-#ifndef _WIN32
+#if !defined (_WIN32) || defined(__MINGW32__)
 	sigact.sa_handler = sighandler;
 	sigemptyset(&sigact.sa_mask);
 	sigact.sa_flags = 0;

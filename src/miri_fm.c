@@ -53,7 +53,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#ifndef _WIN32
+#if !defined (_WIN32) || defined(__MINGW32__)
 #include <unistd.h>
 #else
 #include <windows.h>
@@ -206,7 +206,7 @@ void usage(void)
 		"\t    384:    S10 +2bits \n"
 		"\t    336:    S12\n"
 		"\t    252:    S14\n"
-#ifndef _WIN32
+#if !defined (_WIN32) || defined(__MINGW32__)
 		"\t[-e USB transfer mode (default: 1)]\n"
 #else
 		"\t[-e USB transfer mode (default: 2)]\n"
@@ -262,7 +262,7 @@ void usage(void)
 	exit(1);
 }
 
-#ifdef _WIN32
+#if defined (_WIN32) && !defined(__MINGW32__)
 BOOL WINAPI
 sighandler(int signum)
 {
@@ -1054,7 +1054,7 @@ void dongle_init(struct dongle_state *s)
 	s->offset_tuning = 0;
 	s->demod_target = &demod;
 	s->format = 0;
-#ifndef _WIN32
+#if !defined (_WIN32) || defined(__MINGW32__)
 	s->transfer = 1;
 #else
 	s->transfer = 2;
@@ -1150,7 +1150,7 @@ void sanity_checks(void)
 
 int main(int argc, char **argv)
 {
-#ifndef _WIN32
+#if !defined (_WIN32) || defined(__MINGW32__)
 	struct sigaction sigact;
 #endif
 	int r, opt;
@@ -1327,7 +1327,7 @@ int main(int argc, char **argv)
 		fprintf(stderr, "Failed to open Mirics device #%d.\n", dongle.dev_index);
 		exit(1);
 	}
-#ifndef _WIN32
+#if !defined (_WIN32) || defined(__MINGW32__)
 	sigact.sa_handler = sighandler;
 	sigemptyset(&sigact.sa_mask);
 	sigact.sa_flags = 0;
@@ -1358,7 +1358,7 @@ int main(int argc, char **argv)
 
 	if (strcmp(output.filename, "-") == 0) { /* Write samples to stdout */
 		output.file = stdout;
-#ifdef _WIN32
+#if defined (_WIN32) && !defined(__MINGW32__)
 		_setmode(_fileno(output.file), _O_BINARY);
 #endif
 	} else {
