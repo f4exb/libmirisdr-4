@@ -258,6 +258,7 @@ int mirisdr_set_soft(mirisdr_dev_t *p)
 
     reg5 |= (0xFFF & thresh) << 4;
     /* rezervováno, musí být 0x28 */
+    /* Reserved, must be 0x28 */
     reg5 |= MIRISDR_RF_SYNTHESIZER_RESERVED_PROGRAMMING << 16;
 
     reg2 |= (0xFFF & frac) << 4;
