@@ -38,6 +38,16 @@ typedef enum
     MIRISDR_HW_SDRPLAY,
 } mirisdr_hw_flavour_t;
 
+typedef enum
+{
+    MIRISDR_BAND_AM1,
+    MIRISDR_BAND_AM2,
+    MIRISDR_BAND_VHF,
+    MIRISDR_BAND_3,
+    MIRISDR_BAND_45,
+    MIRISDR_BAND_L,
+} mirisdr_band_t;
+
 typedef struct mirisdr_dev mirisdr_dev_t;
 
 /* devices */
@@ -88,6 +98,7 @@ MIRISDR_API uint32_t mirisdr_get_xtal_freq (mirisdr_dev_t *p);          /* extra
 MIRISDR_API int mirisdr_set_bandwidth (mirisdr_dev_t *p, uint32_t bw);  /* extra */
 MIRISDR_API uint32_t mirisdr_get_bandwidth (mirisdr_dev_t *p);          /* extra */
 MIRISDR_API int mirisdr_set_offset_tuning (mirisdr_dev_t *p, int on);   /* extra */
+MIRISDR_API mirisdr_band_t mirisdr_get_band (mirisdr_dev_t *p);         /* extra */
 
 /* not implemented yet */
 MIRISDR_API int mirisdr_set_freq_correction (mirisdr_dev_t *p, int ppm);
@@ -105,9 +116,11 @@ MIRISDR_API int mirisdr_get_tuner_gain (mirisdr_dev_t *p);              /* extra
 MIRISDR_API int mirisdr_set_tuner_gain_mode (mirisdr_dev_t *p, int mode);
 MIRISDR_API int mirisdr_get_tuner_gain_mode (mirisdr_dev_t *p);         /* extra */
 MIRISDR_API int mirisdr_set_mixer_gain (mirisdr_dev_t *p, int gain);    /* extra */
+MIRISDR_API int mirisdr_set_mixbuffer_gain (mirisdr_dev_t *p, int gain);/* extra */
 MIRISDR_API int mirisdr_set_lna_gain (mirisdr_dev_t *p, int gain);      /* extra */
 MIRISDR_API int mirisdr_set_baseband_gain (mirisdr_dev_t *p, int gain); /* extra */
 MIRISDR_API int mirisdr_get_mixer_gain (mirisdr_dev_t *p);              /* extra */
+MIRISDR_API int mirisdr_get_mixbuffer_gain (mirisdr_dev_t *p);          /* extra */
 MIRISDR_API int mirisdr_get_lna_gain (mirisdr_dev_t *p);                /* extra */
 MIRISDR_API int mirisdr_get_baseband_gain (mirisdr_dev_t *p);           /* extra */
 

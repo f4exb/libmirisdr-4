@@ -33,9 +33,11 @@ struct mirisdr_dev {
     uint32_t            rate;
     int                 gain;
     int                 gain_reduction_lna;
+    int                 gain_reduction_mixbuffer;
     int                 gain_reduction_mixer;
     int                 gain_reduction_baseband;
     mirisdr_hw_flavour_t hw_flavour;
+    mirisdr_band_t      band;
     enum {
         MIRISDR_FORMAT_AUTO_ON = 0,
         MIRISDR_FORMAT_AUTO_OFF

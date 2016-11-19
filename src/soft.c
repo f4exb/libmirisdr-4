@@ -103,11 +103,27 @@ int mirisdr_set_soft(mirisdr_dev_t *p)
         }
 
         lo_div = 16;
+
+        if (switch_plan.am_port == 0) {
+            p->band = MIRISDR_BAND_AM1;
+        } else {
+            p->band = MIRISDR_BAND_AM2;
+        }
     }
     else
     {
         reg0 |= switch_plan.mode << 4;
         lo_div = switch_plan.lo_div;
+
+        if (switch_plan.mode == MIRISDR_MODE_VHF) {
+            p->band = MIRISDR_BAND_VHF;
+        } else if (switch_plan.mode == MIRISDR_MODE_B3) {
+            p->band = MIRISDR_BAND_3;
+        } else if (switch_plan.mode == MIRISDR_MODE_B45) {
+            p->band = MIRISDR_BAND_45;
+        } else if (switch_plan.mode == MIRISDR_MODE_BL) {
+            p->band = MIRISDR_BAND_L;
+        }
     }
 
 //    if (p->freq < 50000000)
@@ -559,5 +575,10 @@ const char *mirisdr_get_transfer(mirisdr_dev_t *p)
     }
 
     return "";
+}
+
+mirisdr_band_t mirisdr_get_band (mirisdr_dev_t *p)
+{
+    return p->band;
 }
 

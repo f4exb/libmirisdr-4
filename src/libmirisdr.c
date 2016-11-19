@@ -115,6 +115,7 @@ int mirisdr_open (mirisdr_dev_t **p, mirisdr_hw_flavour_t hw_flavour, uint32_t i
     dev->freq = DEFAULT_FREQ;
     dev->rate = DEFAULT_RATE;
     dev->gain = DEFAULT_GAIN;
+    dev->band = MIRISDR_BAND_VHF; // matches always the default frequency of 90 MHz
 
     dev->gain_reduction_lna = 0;
     dev->gain_reduction_mixer = 0;
