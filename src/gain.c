@@ -23,7 +23,7 @@ int mirisdr_set_gain (mirisdr_dev_t *p) {
     fprintf (stderr, "gain reduction baseband: %d, lna: %d, mixer: %d\n", p->gain_reduction_baseband, p->gain_reduction_lna, p->gain_reduction_mixer);
 #endif
 // Reset to 0xf380 to enable gain control added Dec 5 2014 SM5BSZ
-    mirisdr_write_reg(p, 0x08, 0xf380);
+//    mirisdr_write_reg(p, 0x08, 0xf380);
 
     /* Receiver Gain Control */
     /* 0-3 => registr */
@@ -45,19 +45,19 @@ int mirisdr_set_gain (mirisdr_dev_t *p) {
     reg6|= 0x1F << 4;
     reg6|= 0x800 << 10;
     mirisdr_write_reg(p, 0x09, reg6);
-// set to 0xf300 to select AM input added Dec 5 2014 SM5BSZ
-    if (p->freq < 50000000)
-      {
-      mirisdr_write_reg(p, 0x08, 0xf300);
-      }
-    else
-      {
-      if (p->freq >= 108000000)
-        {
-// Nothing between 00 and 0xff helps to switch in signals above 108 MHz.
-//        mirisdr_write_reg(p, 0x08, 0xf3ff);
-        }
-      }
+//// set to 0xf300 to select AM input added Dec 5 2014 SM5BSZ
+//    if (p->freq < 50000000)
+//      {
+//      mirisdr_write_reg(p, 0x08, 0xf300);
+//      }
+//    else
+//      {
+//      if (p->freq >= 108000000)
+//        {
+//// Nothing between 00 and 0xff helps to switch in signals above 108 MHz.
+////        mirisdr_write_reg(p, 0x08, 0xf3ff);
+//        }
+//      }
 
     return 0;
 }

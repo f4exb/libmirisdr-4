@@ -64,4 +64,5 @@ typedef struct
     int upconvert_mixer_on;
     int am_port;
     int lo_div;
+    uint32_t band_select_word;
 } hw_switch_freq_plan_t;

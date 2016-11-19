@@ -17,31 +17,37 @@
 
 #include "soft.h"
 
-float band_limits[] = {
-        0., 12., 30., 50., 108., 250., 390., 960., 2400, -1.
-};
-
-uint32_t band_select[] = {
-        0xf780, 0xff80, 0xf280, 0xf380, 0xfa80, 0xf680, 0xf380, 0xfa80, 0x0000, 0x0000
-};
+//float band_limits[] = {
+//        0.,     12.,    30.,    50.,    108.,   250.,   390.,   960.,   2400,   -1.
+//};
+//
+//uint32_t band_select[] = {
+//        0xf780, 0xff80, 0xf280, 0xf380, 0xfa80, 0xf680, 0xf380, 0xfa80, 0x0000, 0x0000
+//};
 
 hw_switch_freq_plan_t hw_switch_freq_plan_default[] = {
-        {0,    MIRISDR_MODE_AM,  MIRISDR_UPCONVERT_MIXER_ON, MIRISDR_AM_PORT2, 16},
-        {50,   MIRISDR_MODE_VHF, 0, 0, 32},
-        {108,  MIRISDR_MODE_B3,  0, 0, 16},
-        {330,  MIRISDR_MODE_B45, 0, 0, 4},
-        {960,  MIRISDR_MODE_BL, 0, 0, 2},
-        {2400, -1, 0, 0, 0},
+        {0,    MIRISDR_MODE_AM,  MIRISDR_UPCONVERT_MIXER_ON, MIRISDR_AM_PORT2, 16, 0xf780},
+        {12,   MIRISDR_MODE_AM,  MIRISDR_UPCONVERT_MIXER_ON, MIRISDR_AM_PORT2, 16, 0xff80},
+        {30,   MIRISDR_MODE_AM,  MIRISDR_UPCONVERT_MIXER_ON, MIRISDR_AM_PORT2, 16, 0xf280},
+        {50,   MIRISDR_MODE_VHF, 0, 0, 32, 0xf380},
+        {108,  MIRISDR_MODE_B3,  0, 0, 16, 0xfa80},
+        {250,  MIRISDR_MODE_B3,  0, 0, 16, 0xf680},
+        {330,  MIRISDR_MODE_B45, 0, 0, 4,  0xf380},
+        {960,  MIRISDR_MODE_BL,  0, 0, 2,  0xfa80},
+        {2400, -1, 0, 0, 0, 0x0000},
 };
 
 hw_switch_freq_plan_t hw_switch_freq_plan_sdrplay[] = {
-        {0,    MIRISDR_MODE_AM,  MIRISDR_UPCONVERT_MIXER_ON, MIRISDR_AM_PORT2, 16},
-        {50,   MIRISDR_MODE_VHF, 0, 0, 32},
-        {120,  MIRISDR_MODE_B3,  0, 0, 16},
+        {0,    MIRISDR_MODE_AM,  MIRISDR_UPCONVERT_MIXER_ON, MIRISDR_AM_PORT2, 16, 0xf780},
+        {12,   MIRISDR_MODE_AM,  MIRISDR_UPCONVERT_MIXER_ON, MIRISDR_AM_PORT2, 16, 0xff80},
+        {30,   MIRISDR_MODE_AM,  MIRISDR_UPCONVERT_MIXER_ON, MIRISDR_AM_PORT2, 16, 0xf280},
+        {50,   MIRISDR_MODE_VHF, 0, 0, 32, 0xf380},
+        {120,  MIRISDR_MODE_B3,  0, 0, 16, 0xfa80},
+        {250,  MIRISDR_MODE_B3,  0, 0, 16, 0xf680},
 //        {250,  MIRISDR_MODE_AM,  MIRISDR_UPCONVERT_MIXER_OFF, MIRISDR_AM_PORT2, 16}, // Really ???
-        {380,  MIRISDR_MODE_B45, 0, 0, 4},
-        {1000, MIRISDR_MODE_BL, 0, 0, 2},
-        {2400, -1, 0, 0, 0},
+        {380,  MIRISDR_MODE_B45, 0, 0, 4,  0xf380},
+        {1000, MIRISDR_MODE_BL,  0, 0, 2,  0xfa80},
+        {2400, -1, 0, 0, 0, 0x0000},
 };
 
 hw_switch_freq_plan_t *hw_switch_freq_plan[2] = {
@@ -268,18 +274,22 @@ int mirisdr_set_soft(mirisdr_dev_t *p)
     /* kernel driver nastavuje až při změně frekvence */
     /* kernel driver adjusts to changing frequencies  */
 
-    i = 0;
+//    i = 0;
+//
+//    while (p->freq >= 1000000 * band_limits[i + 1]) {
+//        i++;
+//    }
+//
+//    if (band_select[i] != 0)
+//    {
+//        mirisdr_write_reg(p, 0x08, 0xf380);
+//        mirisdr_write_reg(p, 0x08, 0x6280);
+//        mirisdr_write_reg(p, 0x08, band_select[i]);
+//    }
 
-    while (p->freq >= 1000000 * band_limits[i + 1]) {
-        i++;
-    }
-
-    if (band_select[i] != 0)
-    {
-        mirisdr_write_reg(p, 0x08, 0xf380);
-        mirisdr_write_reg(p, 0x08, 0x6280);
-        mirisdr_write_reg(p, 0x08, band_select[i]);
-    }
+    mirisdr_write_reg(p, 0x08, 0xf380);
+    mirisdr_write_reg(p, 0x08, 0x6280);
+    mirisdr_write_reg(p, 0x08, switch_plan.band_select_word);
 
     mirisdr_write_reg(p, 0x09, 0x0e);
     mirisdr_write_reg(p, 0x09, 0x03);
@@ -288,18 +298,18 @@ int mirisdr_set_soft(mirisdr_dev_t *p)
     mirisdr_write_reg(p, 0x09, reg5);
     mirisdr_write_reg(p, 0x09, reg2);
 
-    if (band_select[i] != 0)
-    {
-        mirisdr_write_reg(p, 0x08, 0xf380);
-        mirisdr_write_reg(p, 0x08, 0x6280);
-        mirisdr_write_reg(p, 0x08, band_select[i]);
-        mirisdr_write_reg(p, 0x09, 0x0e);
-        mirisdr_write_reg(p, 0x09, 0x03);
-
-        mirisdr_write_reg(p, 0x09, reg0);
-        mirisdr_write_reg(p, 0x09, reg5);
-        mirisdr_write_reg(p, 0x09, reg2);
-    }
+//    if (band_select[i] != 0)
+//    {
+//        mirisdr_write_reg(p, 0x08, 0xf380);
+//        mirisdr_write_reg(p, 0x08, 0x6280);
+//        mirisdr_write_reg(p, 0x08, band_select[i]);
+//        mirisdr_write_reg(p, 0x09, 0x0e);
+//        mirisdr_write_reg(p, 0x09, 0x03);
+//
+//        mirisdr_write_reg(p, 0x09, reg0);
+//        mirisdr_write_reg(p, 0x09, reg5);
+//        mirisdr_write_reg(p, 0x09, reg2);
+//    }
 
 #if MIRISDR_DEBUG >= 1
     fprintf( stderr,"sel:%d %x ",i,band_select[i]);
