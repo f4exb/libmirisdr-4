@@ -162,6 +162,13 @@ int mirisdr_close (mirisdr_dev_t *p) {
     /* ukončení async čtení okamžitě */
     mirisdr_cancel_async_now(p);
 
+    // similar to rtl-sdr
+#if defined(_WIN32) && !defined(__MINGW32__)
+            Sleep(1);
+#else
+            usleep(1000);
+#endif
+
     /* deinicializace tuneru */
     if (p->dh) {
         libusb_release_interface(p->dh, 0);
