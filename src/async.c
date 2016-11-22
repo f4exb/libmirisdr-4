@@ -364,7 +364,7 @@ int mirisdr_read_async (mirisdr_dev_t *p, mirisdr_read_async_cb_t cb, void *ctx,
     p->xfer_out_len = (len == 0) ? 0 : len;
     p->xfer_out_pos = 0;
 #if MIRISDR_DEBUG >= 1
-    fprintf( stderr, "async read on device %u, buffers: %lu, output size: ", 
+    fprintf( stderr, "async read on device %u, buffers: %lu, output size: ",
                                 p->index, (long)p->xfer_buf_num);
     if (p->xfer_out_len) {
         fprintf( stderr, "%lu", (long)p->xfer_out_len);
@@ -430,7 +430,7 @@ int mirisdr_read_async (mirisdr_dev_t *p, mirisdr_read_async_cb_t cb, void *ctx,
         r = libusb_submit_transfer(p->xfer[i]);
 
 		if (r < 0) {
-			fprintf(stderr, "Failed to submit transfer %i reason: %d\n", i, r);
+			fprintf(stderr, "Failed to submit transfer %lu reason: %d\n", i, r);
 			goto failed_free;
 		}
     }
@@ -485,7 +485,7 @@ int mirisdr_read_async (mirisdr_dev_t *p, mirisdr_read_async_cb_t cb, void *ctx,
     /* ukončíme streamování dat */
 #if defined (_WIN32) && !defined(__MINGW32__)
     Sleep(20);
-#else                
+#else
     usleep(20000);
 #endif
     mirisdr_streaming_stop(p);
@@ -513,7 +513,9 @@ int mirisdr_start_async (mirisdr_dev_t *p) {
     for (i = 0; i < p->xfer_buf_num; i++) {
         if (!p->xfer[i]) continue;
 
-        libusb_submit_transfer(p->xfer[i]);
+        if (libusb_submit_transfer(p->xfer[i])< 0) {
+            goto failed;
+        }
     }
 
     if (p->async_status != MIRISDR_ASYNC_PAUSED) goto failed;
@@ -563,7 +565,7 @@ int mirisdr_stop_async (mirisdr_dev_t *p) {
 
 #if defined (_WIN32) && !defined(__MINGW32__)
     Sleep(20);
-#else                
+#else
     usleep(20000);
 #endif
     mirisdr_streaming_stop(p);
