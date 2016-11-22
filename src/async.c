@@ -426,7 +426,13 @@ int mirisdr_read_async (mirisdr_dev_t *p, mirisdr_read_async_cb_t cb, void *ctx,
             fprintf( stderr, "unsupported transfer type\n");
             goto failed_free;
         }
-        libusb_submit_transfer(p->xfer[i]);
+
+        r = libusb_submit_transfer(p->xfer[i]);
+
+		if (r < 0) {
+			fprintf(stderr, "Failed to submit transfer %i reason: %d\n", i, r);
+			goto failed_free;
+		}
     }
 
     /* spustíme streamování dat */
