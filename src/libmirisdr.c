@@ -170,9 +170,13 @@ int mirisdr_close (mirisdr_dev_t *p) {
 #endif
 
     /* deinicializace tuneru */
-    if (p->dh) {
+    if (p->dh)
+    {
         libusb_release_interface(p->dh, 0);
-        libusb_close(p->dh);
+
+        if (p->async_status != MIRISDR_ASYNC_FAILED) {
+            libusb_close(p->dh);
+        }
     }
 
     if (p->ctx) libusb_exit(p->ctx);
