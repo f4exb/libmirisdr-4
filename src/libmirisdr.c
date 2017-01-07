@@ -106,6 +106,29 @@ int mirisdr_open (mirisdr_dev_t **p, mirisdr_hw_flavour_t hw_flavour, uint32_t i
     mirisdr_streaming_stop(dev);
     mirisdr_adc_stop(dev);
 
+    if (libusb_kernel_driver_active(dev->dh, 0) == 1) {
+        dev->driver_active = 1;
+
+#ifdef DETACH_KERNEL_DRIVER
+        if (!libusb_detach_kernel_driver(dev->dh, 0)) {
+            fprintf(stderr, "Detached kernel driver\n");
+        } else {
+            fprintf(stderr, "Detaching kernel driver failed!");
+            dev->driver_active = 0;
+            goto failed;
+        }
+#else
+        fprintf(stderr, "\nKernel driver is active, or device is "
+                "claimed by second instance of libmirisdr."
+                "\nIn the first case, please either detach"
+                " or blacklist the kernel module\n"
+                "(msi001 and msi2500), or enable automatic"
+                " detaching at compile time.\n\n");
+#endif
+    } else {
+        dev->driver_active = 0;
+    }
+
     if ((r = libusb_claim_interface(dev->dh, 0)) < 0) {
         fprintf( stderr, "failed to claim miri usb device %u with code %d\n", dev->index, r);
         goto failed;
@@ -174,6 +197,14 @@ int mirisdr_close (mirisdr_dev_t *p) {
     {
         libusb_release_interface(p->dh, 0);
 
+#ifdef DETACH_KERNEL_DRIVER
+        if (p->driver_active) {
+            if (!libusb_attach_kernel_driver(p->dh, 0))
+                fprintf(stderr, "Reattached kernel driver\n");
+            else
+                fprintf(stderr, "Reattaching kernel driver failed!\n");
+        }
+#endif
         if (p->async_status != MIRISDR_ASYNC_FAILED) {
             libusb_close(p->dh);
         }

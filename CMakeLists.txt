@@ -102,6 +102,18 @@ add_custom_target(uninstall
     ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake
 )
 
+
+########################################################################
+# Handle detach kernel driver option
+########################################################################
+option(DETACH_KERNEL_DRIVER "Detach kernel driver if loaded" OFF)
+if (DETACH_KERNEL_DRIVER)
+    message (STATUS "Building with kernel driver detaching enabled")
+    add_definitions(-DDETACH_KERNEL_DRIVER=1)
+else (DETACH_KERNEL_DRIVER)
+    message (STATUS "Building with kernel driver detaching disabled, use -DDETACH_KERNEL_DRIVER=ON to enable")
+endif (DETACH_KERNEL_DRIVER)
+
 ########################################################################
 # Add subdirectories
 ########################################################################

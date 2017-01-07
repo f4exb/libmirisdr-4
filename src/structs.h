@@ -95,5 +95,6 @@ struct mirisdr_dev {
     size_t              xfer_out_pos;
     unsigned char       *xfer_out;
     uint32_t            addr;
+    int                 driver_active;
 };
 
