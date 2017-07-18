@@ -46,7 +46,7 @@ set(CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE} CACHE STRING "")
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/Modules)
 
 # Set the version information here
-set(VERSION_INFO_MAJOR_VERSION 0) # increment major on api compatibility changes
+set(VERSION_INFO_MAJOR_VERSION 4) # increment major on api compatibility changes
 set(VERSION_INFO_MINOR_VERSION 0) # increment minor on feature-level changes
 set(VERSION_INFO_PATCH_VERSION git) # increment patch for bug fixes and docs
 include(Version) # setup version info
@@ -143,7 +143,7 @@ ENDIF(CMAKE_CROSSCOMPILING)
 
 set(prefix ${CMAKE_INSTALL_PREFIX})
 set(exec_prefix \${prefix})
-set(libdir \${exec_prefix}/lib)
+set(libdir \${exec_prefix}/lib${LIB_SUFFIX})
 set(includedir \${prefix}/include)
 
 CONFIGURE_FILE(
@@ -153,7 +153,7 @@ CONFIGURE_FILE(
 
 INSTALL(
     FILES ${CMAKE_CURRENT_BINARY_DIR}/libmirisdr.pc
-    DESTINATION lib/pkgconfig
+    DESTINATION lib${LIB_SUFFIX}/pkgconfig
 )
 
 ########################################################################
