@@ -17,6 +17,7 @@
 
 static mirisdr_device_t mirisdr_devices[] = {
     { 0x1df7, 0x2500, "Mirics MSi2500 default (e.g. VTX3D card)", "Mirics", "MSi2500"},
+    { 0x1df7, 0x3000, "SDRplay RSP1A", "Mirics", "RSP1A"},
     { 0x2040, 0xd300, "Hauppauge WinTV 133559 LF", "Hauppauge", "WinTV 133559 LF"},
     { 0x07ca, 0x8591, "AverMedia A859 Pure DVBT", "AverTV", "A859 Pure DVBT"},
     { 0x04bb, 0x0537, "IO-DATA GV-TV100 stick", "IO-DATA", "GV-TV100"},
