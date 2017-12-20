@@ -23,3 +23,6 @@ SUBSYSTEMS=="usb", ATTRS{idVendor}=="04bb", ATTRS{idProduct}=="0537", MODE:="066
 
 # SDRplay RSP1A
 SUBSYSTEMS=="usb", ATTRS{idVendor}=="1df7", ATTRS{idProduct}=="3000", MODE:="0666"
+
+# SDRplay RSP2
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="1df7", ATTRS{idProduct}=="3010", MODE:="0666"
