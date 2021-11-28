@@ -56,11 +56,12 @@ MIRISDR_API const char *mirisdr_get_device_name (uint32_t index);
 MIRISDR_API int mirisdr_get_device_usb_strings (uint32_t index, char *manufact, char *product, char *serial);
 
 /* main */
-MIRISDR_API int mirisdr_open (mirisdr_dev_t **p, mirisdr_hw_flavour_t hw_flavour, uint32_t index);
+MIRISDR_API int mirisdr_open (mirisdr_dev_t **p, uint32_t index);
 MIRISDR_API int mirisdr_close (mirisdr_dev_t *p);
 MIRISDR_API int mirisdr_reset (mirisdr_dev_t *p);                       /* extra */
 MIRISDR_API int mirisdr_reset_buffer (mirisdr_dev_t *p);
 MIRISDR_API int mirisdr_get_usb_strings (mirisdr_dev_t *dev, char *manufact, char *product, char *serial);
+MIRISDR_API int mirisdr_set_hw_flavour (mirisdr_dev_t *p, mirisdr_hw_flavour_t hw_flavour);
 
 /* sync */
 MIRISDR_API int mirisdr_read_sync (mirisdr_dev_t *p, void *buf, int len, int *n_read);

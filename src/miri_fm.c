@@ -1322,11 +1322,14 @@ int main(int argc, char **argv)
 		exit(1);
 	}
 
-	r = mirisdr_open(&dongle.dev, hw_flavour, (uint32_t)dongle.dev_index);
+	r = mirisdr_open(&dongle.dev, (uint32_t)dongle.dev_index);
 	if (r < 0) {
 		fprintf(stderr, "Failed to open Mirics device #%d.\n", dongle.dev_index);
 		exit(1);
 	}
+
+	mirisdr_set_hw_flavour(dongle.dev, hw_flavour);
+
 #if !defined (_WIN32) || defined(__MINGW32__)
 	sigact.sa_handler = sighandler;
 	sigemptyset(&sigact.sa_mask);
