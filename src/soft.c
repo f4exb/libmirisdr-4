@@ -32,6 +32,7 @@ hw_switch_freq_plan_t hw_switch_freq_plan_default[] = {
         {50,   MIRISDR_MODE_VHF, 0, 0, 32, 0xf380},
         {108,  MIRISDR_MODE_B3,  0, 0, 16, 0xfa80},
         {250,  MIRISDR_MODE_B3,  0, 0, 16, 0xf680},
+        {259,  6              ,  0, 0, 8,  0xf680},
         {330,  MIRISDR_MODE_B45, 0, 0, 4,  0xf380},
         {960,  MIRISDR_MODE_BL,  0, 0, 2,  0xfa80},
         {2400, -1, 0, 0, 0, 0x0000},
@@ -44,8 +45,8 @@ hw_switch_freq_plan_t hw_switch_freq_plan_sdrplay[] = {
         {50,   MIRISDR_MODE_VHF, 0, 0, 32, 0xf380},
         {120,  MIRISDR_MODE_B3,  0, 0, 16, 0xfa80},
         {250,  MIRISDR_MODE_B3,  0, 0, 16, 0xf680},
-//        {250,  MIRISDR_MODE_AM,  MIRISDR_UPCONVERT_MIXER_OFF, MIRISDR_AM_PORT2, 16}, // Really ???
-        {380,  MIRISDR_MODE_B45, 0, 0, 4,  0xf380},
+        {259,  6              ,  0, 0, 8,  0xf680},
+        {404,  MIRISDR_MODE_B45, 0, 0, 4,  0xf380},
         {1000, MIRISDR_MODE_BL,  0, 0, 2,  0xfa80},
         {2400, -1, 0, 0, 0, 0x0000},
 };
