@@ -48,8 +48,8 @@ hw_switch_freq_plan_t hw_switch_freq_plan_sdrplay[] = {
         {112,  MIRISDR_MODE_B3,  0, 0, 16, 0xf580},
         {250,  MIRISDR_MODE_B3,  0, 0, 16, 0xf480},
         {259,  6              ,  0, 0, 8,  0xf480},
-        {404,  MIRISDR_MODE_B45, 0, 0, 4,  0xf180},
-        {1000, MIRISDR_MODE_BL,  0, 0, 2,  0xf180},
+        {404,  MIRISDR_MODE_B45, 0, 0, 4,  0xf580},
+        {1000, MIRISDR_MODE_BL,  0, 0, 2,  0xf580},
         {2400, -1, 0, 0, 0, 0x0000},
 };
 
