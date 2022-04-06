@@ -147,6 +147,7 @@ int mirisdr_open (mirisdr_dev_t **p, uint32_t index) {
     dev->format_auto = MIRISDR_FORMAT_AUTO_ON;
     dev->bandwidth = MIRISDR_BW_8MHZ;
     dev->xtal = MIRISDR_XTAL_24M;
+    dev->bias = 0;
 
     dev->hw_flavour = MIRISDR_HW_DEFAULT;
 

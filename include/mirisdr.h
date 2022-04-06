@@ -124,6 +124,8 @@ MIRISDR_API int mirisdr_get_mixer_gain (mirisdr_dev_t *p);              /* extra
 MIRISDR_API int mirisdr_get_mixbuffer_gain (mirisdr_dev_t *p);          /* extra */
 MIRISDR_API int mirisdr_get_lna_gain (mirisdr_dev_t *p);                /* extra */
 MIRISDR_API int mirisdr_get_baseband_gain (mirisdr_dev_t *p);           /* extra */
+MIRISDR_API int mirisdr_set_bias (mirisdr_dev_t *p, int bias);          /* extra */
+MIRISDR_API int mirisdr_get_bias (mirisdr_dev_t *p);                    /* extra */
 
 #ifdef __cplusplus
 }
