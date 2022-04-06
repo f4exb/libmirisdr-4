@@ -37,7 +37,7 @@ failed:
 #define CMD_WREG               0x41
 #define CMD_RREG               0x42
 #define CMD_START_STREAMING    0x43
-#define CMD_DOWNLOAD           0x41
+#define CMD_DOWNLOAD           0x44
 #define CMD_STOP_STREAMING     0x45
 //WValue = Addr?
 #define CMD_REEPROM            0x46
