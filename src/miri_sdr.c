@@ -253,11 +253,14 @@ int main(int argc, char **argv)
 	fprintf(stderr, "Using device %d: %s\n",
 		dev_index, mirisdr_get_device_name(dev_index));
 
-	r = mirisdr_open(&dev, hw_flavour, dev_index);
+	r = mirisdr_open(&dev, dev_index);
 	if (r < 0) {
 		fprintf(stderr, "Failed to open mirisdr device #%d.\n", dev_index);
 		exit(1);
 	}
+
+	mirisdr_set_hw_flavour(dev, hw_flavour);
+
 #if !defined (_WIN32) || defined(__MINGW32__)
 	sigact.sa_handler = sighandler;
 	sigemptyset(&sigact.sa_mask);

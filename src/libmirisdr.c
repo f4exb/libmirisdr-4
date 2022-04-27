@@ -53,7 +53,7 @@
 #include "soft.c"
 #include "sync.c"
 
-int mirisdr_open (mirisdr_dev_t **p, mirisdr_hw_flavour_t hw_flavour, uint32_t index) {
+int mirisdr_open (mirisdr_dev_t **p, uint32_t index) {
     mirisdr_dev_t *dev = NULL;
     libusb_device **list, *device = NULL;
     struct libusb_device_descriptor dd;
@@ -147,8 +147,9 @@ int mirisdr_open (mirisdr_dev_t **p, mirisdr_hw_flavour_t hw_flavour, uint32_t i
     dev->format_auto = MIRISDR_FORMAT_AUTO_ON;
     dev->bandwidth = MIRISDR_BW_8MHZ;
     dev->xtal = MIRISDR_XTAL_24M;
+    dev->bias = 0;
 
-    dev->hw_flavour = hw_flavour;
+    dev->hw_flavour = MIRISDR_HW_DEFAULT;
 
     /* ISOC is more stable but works only on Unix systems */
 #if !defined (_WIN32) || defined(__MINGW32__)
@@ -262,4 +263,14 @@ int mirisdr_get_usb_strings (mirisdr_dev_t *dev, char *manufact, char *product, 
     memset(serial, 0, 256);
 
     return 0;
+}
+
+int mirisdr_set_hw_flavour (mirisdr_dev_t *p, mirisdr_hw_flavour_t hw_flavour) {
+    if (!p) goto failed;
+
+    p->hw_flavour = hw_flavour;
+    return 0;
+
+failed:
+    return -1;
 }
